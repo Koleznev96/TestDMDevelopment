@@ -7,19 +7,19 @@ const roomSchema = new Schema({
     },
     costPerDay: {
         type: Number,
-        required: true,
+        required: false,
     },
     numberBerths: {
         type: Number,
-        required: true
+        required: false
     },
     area: {
         type: Number,
-        required: true
+        required: false
     },
     numberRooms: {
         type: String,
-        required: true
+        required: false
     },
     address: {
         type: String,

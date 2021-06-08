@@ -5,9 +5,9 @@ const Conveniences = require('../models/Conveniences');
 
 module.exports.createCommodity = async function(req, res) {
     try {
-        const { conveniences } = req.body;
+        const { convenience } = req.body;
 
-        if (!conveniences.commodity || conveniences.commodity === "") {
+        if (!convenience.commodity || convenience.commodity === "") {
             return res.status(401).json({
                 success: false,
                 massage: "Поле commodity пустое."
@@ -15,20 +15,20 @@ module.exports.createCommodity = async function(req, res) {
         }
 
         const existing = await Conveniences.findOne({
-            commodity: conveniences.commodity
+            commodity: convenience.commodity
         });
 
         if (existing) {
             return res.json({ conveniences: existing });
         }
 
-        const conveniencesNew = new Conveniences({
-            commodity: conveniences.commodity
+        const convenienceNew = new Conveniences({
+            commodity: convenience.commodity
         });
 
-        await conveniencesNew.save();
+        await convenienceNew.save();
 
-        res.status(201).json({ conveniences: conveniencesNew });
+        res.status(201).json({ conveniences: convenienceNew });
     } catch(e) {
         errorHandler(res, e);
     }
@@ -36,38 +36,38 @@ module.exports.createCommodity = async function(req, res) {
 
 module.exports.updateCommodity = async function(req, res) {
     try {
-        const { conveniences } = req.body;
+        const { convenience } = req.body;
 
-        if (!conveniences.commodity || conveniences.commodity === "") {
+        if (!convenience.commodity || convenience.commodity === "") {
             return res.status(401).json({
                 success: false,
                 massage: "Поле commodity пустое."
             });
         }
 
-        if (!conveniences.facilitiesId || conveniences.facilitiesId === "") {
+        if (!convenience._id || convenience._id === "") {
             return res.status(401).json({
                 success: false,
-                massage: "Значение facilitiesId пустое."
+                massage: "Поле _id пустое."
             });
         }
 
-        let conveniencesUpdate = await Conveniences.findOne({
-            _id: conveniences.facilitiesId
+        let convenienceUpdate = await Conveniences.findOne({
+            _id: convenience._id
         });
 
-        if (!conveniencesUpdate) {
+        if (!convenienceUpdate) {
             return res.status(500).json({
                 success: false,
-                massage: `Удобство с id: ${conveniences.facilitiesId}, не найдено.`
+                massage: `Удобство с id: ${convenience._id}, не найдено.`
             });
         }
 
-        conveniencesUpdate.commodity = conveniences.commodity;
-        await conveniencesUpdate.save();
+        convenienceUpdate.commodity = convenience.commodity;
+        await convenienceUpdate.save();
 
         res.status(201).json({
-            conveniences: conveniencesUpdate
+            conveniences: convenienceUpdate
         });
     } catch(e) {
         errorHandler(res, e);
@@ -76,31 +76,31 @@ module.exports.updateCommodity = async function(req, res) {
 
 module.exports.deleteCommodity = async function(req, res) {
     try {
-        const { conveniences } = req.body;
+        const { convenience } = req.body;
 
-        if (!conveniences.facilitiesId || conveniences.facilitiesId === "") {
+        if (!convenience._id || convenience._id === "") {
             return res.status(401).json({
                 success: false,
-                massage: "Значение facilitiesId пустое."
+                massage: "Поле _id пустое."
             });
         }
 
-        const conveniencesDelete = await Conveniences.findOne({
-            _id: conveniences.facilitiesId
+        const convenienceDelete = await Conveniences.findOne({
+            _id: convenience._id
         });
 
-        if (!conveniencesDelete) {
+        if (!convenienceDelete) {
             return res.status(404).json({
                 success: false,
-                massage: `Удобство с id: ${conveniences.facilitiesId}, не найдено.`
+                massage: `Удобство с id: ${convenience._id}, не найдено.`
             });
         }
 
-        await conveniencesDelete.delete();
+        await convenienceDelete.delete();
 
         res.status(201).json({
-            conveniences: conveniencesDelete
-        });;
+            conveniences: convenienceDelete
+        });
     } catch(e) {
         errorHandler(res, e);
     }

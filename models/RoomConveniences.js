@@ -7,7 +7,7 @@ const roomFacilitiesSchema = new Schema({
         ref: 'Room',
         required: true
     },
-    FacilitiesId: {
+    convenienceId: {
         type: Schema.Types.ObjectId,
         ref: 'Conveniences',
         required: true
