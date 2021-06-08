@@ -1,6 +1,6 @@
 const {Schema, model} = require('mongoose');
 
-const hotelSchema = new Schema({
+const roomSchema = new Schema({
     type: {
         type: String,
         required: true,
@@ -16,7 +16,11 @@ const hotelSchema = new Schema({
     area: {
         type: Number,
         required: true
+    },
+    imgSrc: {
+        type: String,
+        required: false
     }
 });
 
-module.exports = model('Hotel', hotelSchema);
+module.exports = model('Room', roomSchema);
