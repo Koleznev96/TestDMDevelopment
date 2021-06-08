@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
 const hotelRoute = require('./routes/hotel');
+const facilitiesRoute = require('./routes/facilities');
 
 const keys = require('./config/keys');
 
@@ -19,6 +20,7 @@ app.use(bodyParser.json());
 app.use(require('cors')());
 
 app.use('/api/hotel', hotelRoute);
+app.use('/api/facilities', facilitiesRoute);
 
 
 module.exports = app;

@@ -1,11 +1,9 @@
 const errorHandler = require('../utils/errorHandler');
 
-const Room = require('../models/Room');
 const Facilities = require('../models/Facilities');
-const RoomFacilities = require('../models/RoomFacilities');
 
 
-module.exports.createRoom = async function(req, res) {
+module.exports.createCommodity = async function(req, res) {
     try {
         res.status(201).json();
     } catch(e) {
@@ -13,7 +11,7 @@ module.exports.createRoom = async function(req, res) {
     }
 }
 
-module.exports.updateRoom = async function(req, res) {
+module.exports.updateCommodity = async function(req, res) {
     try {
         res.status(201).json();
     } catch(e) {
@@ -21,7 +19,7 @@ module.exports.updateRoom = async function(req, res) {
     }
 }
 
-module.exports.deleteRoom = async function(req, res) {
+module.exports.deleteCommodity = async function(req, res) {
     try {
         res.status(201).json();
     } catch(e) {
@@ -29,7 +27,7 @@ module.exports.deleteRoom = async function(req, res) {
     }
 }
 
-module.exports.getRooms = async function(req, res) {
+module.exports.getCommodities = async function(req, res) {
     try {
         res.status(201).json();
     } catch(e) {

@@ -14,9 +14,9 @@ router.put('/room/:id',
 router.delete('/room/:id',
     controller.deleteRoom);
 
-// GET: localhost:5000/api/hotel/room/:id
-router.get('/room/:id',
-    controller.getRoom);
+// GET: localhost:5000/api/hotel/rooms
+router.get('/rooms',
+    controller.getRooms);
 
 
 module.exports = router;
