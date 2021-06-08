@@ -21,7 +21,8 @@
     "dateformat": "^4.5.1",
     "express": "^4.17.1",
     "moment": "^2.29.1",
-    "mongoose": "^5.12.3"
+    "mongoose": "^5.12.3",
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
     "concurrently": "^6.0.2",

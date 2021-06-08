@@ -5,11 +5,11 @@ const roomSchema = new Schema({
         type: String,
         required: true,
     },
-    cost_per_day: {
+    costPerDay: {
         type: Number,
         required: true,
     },
-    number_berths: {
+    numberBerths: {
         type: Number,
         required: true
     },
@@ -17,7 +17,11 @@ const roomSchema = new Schema({
         type: Number,
         required: true
     },
-    imgSrc: {
+    numberRooms: {
+        type: String,
+        required: true
+    },
+    address: {
         type: String,
         required: false
     }

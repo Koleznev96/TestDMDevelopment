@@ -9,7 +9,7 @@ const roomFacilitiesSchema = new Schema({
     },
     FacilitiesId: {
         type: Schema.Types.ObjectId,
-        ref: 'Facilities',
+        ref: 'Conveniences',
         required: true
     },
 });
