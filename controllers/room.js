@@ -133,9 +133,9 @@ module.exports.deleteRoom = async function(req, res) {
         });
         await roomDelete.delete();
 
-        res.status(201).json({
-            room: roomDelete
-        });
+        const rooms = await Room.find();
+
+        res.status(201).json({ rooms });
     } catch(e) {
         errorHandler(res, e);
     }
@@ -145,7 +145,10 @@ module.exports.getRooms = async function(req, res) {
     try {
         const rooms = await Room.find();
 
-        res.status(201).json({ rooms });
+        const roomConveniences = await RoomConveniences.find({}, 'roomId convenienceId -_id');;
+        console.log(roomConveniences)
+
+        res.status(201).json({ rooms, roomConveniences });
     } catch(e) {
         errorHandler(res, e);
     }

@@ -7,3 +7,4 @@ export const RedactionContext = createContext({
     changeTrueRedaction: noop,
     changeFalseRedaction: noop,
 });
+

@@ -13,7 +13,7 @@ export const useRoutes = isRedaction => {
                 <Route path="/home" exact>
                     <Home/>
                 </Route>
-                <Route path="/hotel" exact>
+                <Route path="/hotel/:id" exact>
                     <Hotel/>
                 </Route>
                 <Redirect to="/home"/>
@@ -25,7 +25,7 @@ export const useRoutes = isRedaction => {
             <Route path="/home" exact>
                 <HomeRedaction/>
             </Route>
-            <Route path="/hotel" exact>
+            <Route path="/hotel/:id" >
                 <HotelRedaction/>
             </Route>
             <Redirect to="/home"/>

@@ -25,6 +25,7 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "@material-ui/icons": "^4.11.2",
     "concurrently": "^6.0.2",
     "lib": "^4.3.3",
     "mongodb": "^3.6.5",

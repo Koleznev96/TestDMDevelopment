@@ -28,7 +28,9 @@ module.exports.createCommodity = async function(req, res) {
 
         await convenienceNew.save();
 
-        res.status(201).json({ conveniences: convenienceNew });
+        const conveniences = await Conveniences.find();
+
+        res.status(201).json({ conveniences: conveniences });
     } catch(e) {
         errorHandler(res, e);
     }
@@ -98,8 +100,10 @@ module.exports.deleteCommodity = async function(req, res) {
 
         await convenienceDelete.delete();
 
+        const conveniences = await Conveniences.find();
+
         res.status(201).json({
-            conveniences: convenienceDelete
+            conveniences: conveniences
         });
     } catch(e) {
         errorHandler(res, e);

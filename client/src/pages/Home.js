@@ -1,18 +1,32 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
+import { Grid } from '@material-ui/core';
 
-import {Conveniences} from "../components/Conveniences";
-
+import {Conveniences} from "../components/home/Conveniences";
+import {Rooms} from "../components/home/Rooms";
+import {useSort} from "../hooks/sort.hook";
+import {SortContext} from "../context/sortContext";
 
 export const Home = () => {
+    const {listConveniences, changeListConveniences} = useSort();
     const classes = useStyles();
 
     return (
-        <Grid container className="main__content-inner">
-            {/*{ <Conveniences /> }*/}
-            <h1>Home</h1>
-        </Grid>
+        <SortContext.Provider value={{
+            listConveniences, changeListConveniences
+        }}>
+            <Grid container className={classes.root}>
+                <Grid container className={classes.conveniences} md={3}>
+                    <Conveniences />
+                </Grid>
+
+                <Grid container className={classes.rooms} md={9}>
+                    {/*<h1>Home</h1>*/}
+                    <Rooms />
+                </Grid>
+
+            </Grid>
+        </SortContext.Provider>
     );
 };
 
@@ -20,11 +34,11 @@ const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
     },
-    paper: {
-        height: 140,
-        width: 100,
+    conveniences: {
+        minHeight: '100vh',
+        maxHeight: '100%',
     },
-    control: {
-        padding: theme.spacing(2),
-    },
+    rooms: {
+
+    }
 }));
