@@ -35,14 +35,10 @@ export const Rooms = () => {
         clearError();
     }, [error, clearError]);
 
-    function routerId(id) {
-        return "/hotel/" + id;
-    }
-
     const room = (item, index) => (
         <ListItem>
             <NavLink
-                to={routerId(item._id)}
+                to={"/hotel/" + item._id}
                 key={index.toString()}
                 className={classes.listItem}
                 borderColor="error.main"
@@ -74,12 +70,13 @@ export const Rooms = () => {
                 if (list_sort.listConveniences.length !== 0) {
                     let status = false;
                     for (let i = 0; i < list_sort.listConveniences.length; i++) {
-                        for (let k = 0; k < roomConveniences.length; k++) {
-                            if (roomConveniences[k].roomId === item._id){
-                                status = list_sort.listConveniences[i] === roomConveniences[k].convenienceId;
-                            }
+                        const currentIndex = roomConveniences.find(x => (x.roomId === item._id) &&
+                            (x.convenienceId === list_sort.listConveniences[i]));
+                        if (currentIndex) {
+                            status = true;
                         }
                     }
+
                     if (status)
                         return room(item, index);
                     else

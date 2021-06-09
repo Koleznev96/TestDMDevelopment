@@ -1,5 +1,5 @@
 import React, {useCallback, useState, useEffect, useContext} from 'react';
-import {NavLink} from "react-router-dom";
+import {NavLink, useHistory} from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import {
     Button,
@@ -13,6 +13,7 @@ import {useHttp} from "../../hooks/http.hook";
 
 
 export const RoomsRedaction = () => {
+    const history = useHistory();
     const classes = useStyles();
     const {request, error, clearError} = useHttp();
     const [listRooms, setListRooms] = useState(null);
@@ -32,10 +33,6 @@ export const RoomsRedaction = () => {
         clearError();
     }, [error, clearError]);
 
-    function routerId(id) {
-        return "/hotel/" + id;
-    }
-
     const roomDelete = async (item) => {
         try {
             const data = await request('/api/hotel/delete-room', 'POST', {
@@ -48,7 +45,7 @@ export const RoomsRedaction = () => {
     const room = (item, index) => (
         <ListItem>
             <NavLink
-                to={routerId(item._id)}
+                to={"/hotel/" + item._id}
                 key={index.toString()}
                 className={classes.listItem}
                 borderColor="error.main"
@@ -87,7 +84,10 @@ export const RoomsRedaction = () => {
             {listRooms.map((item, index) => {
                 return room(item, index);
             })}
-            <Button className={classes.roomItemNew}>
+            <Button
+                className={classes.roomItemNew}
+                onClick={() => {history.push('/hotel/new');}}
+            >
                 <Box className={classes.textPlus}>
                     +
                 </Box>
@@ -108,9 +108,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: '#fff',
         width: '100%',
     },
-
     textItem: {
-
         color: '#000',
         fontSize: 18,
     },

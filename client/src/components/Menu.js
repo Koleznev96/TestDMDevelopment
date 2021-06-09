@@ -1,8 +1,10 @@
 import React, {useContext} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import {useHistory} from "react-router-dom";
 import {
     Button,
     Grid,
+    Box
 } from '@material-ui/core';
 
 import {RedactionContext} from "../context/redactionContext";
@@ -10,12 +12,22 @@ import {RedactionContext} from "../context/redactionContext";
 
 export const Menu = () => {
     const menu = useContext(RedactionContext);
+    const history = useHistory();
     const classes = useStyles();
 
     return (
         <Grid container className={classes.header}>
             <Grid container className={classes.menuIcon} md={3}>
-
+                <Button
+                    className={classes.menuButton}
+                    onClick={() => {history.push('/');}}
+                >
+                    <Box
+                        className={classes.textButton}
+                    >
+                        Главная
+                    </Box>
+                </Button >
             </Grid>
             <Grid container className={classes.menu} md={9}>
                 <Button

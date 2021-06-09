@@ -21,7 +21,6 @@ export const Home = () => {
                 </Grid>
 
                 <Grid container className={classes.rooms} md={9}>
-                    {/*<h1>Home</h1>*/}
                     <Rooms />
                 </Grid>
 

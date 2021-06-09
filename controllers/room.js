@@ -83,6 +83,7 @@ module.exports.updateRoom = async function(req, res) {
         // update Room data
         roomUpdate.type = room.type;
         roomUpdate.costPerDay = room.costPerDay;
+        roomUpdate.numberBerths = room.numberBerths;
         roomUpdate.area = room.area;
         roomUpdate.numberRooms = room.numberRooms;
         roomUpdate.address = room.address;
@@ -171,12 +172,14 @@ module.exports.getRoom = async function(req, res) {
 
         const room_convenience_list = await RoomConveniences.find({roomId});
 
-        const conveniences = await Conveniences.find({
+        const roomConveniences = await Conveniences.find({
             _id: { $in: room_convenience_list.map((item ) => item.convenienceId) }
         });
 
+        const conveniences = await Conveniences.find();
+
         res.status(201).json({
-            room, conveniences
+            room, conveniences, roomConveniences
         });
     } catch(e) {
         errorHandler(res, e);

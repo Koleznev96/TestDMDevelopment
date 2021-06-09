@@ -93,8 +93,8 @@ export const ConveniencesRedaction = () => {
                 <Grid container className={classes.linerButton}>
                     <TextField
                         placeholder="Название"
-                        id="email"
-                        name="email"
+                        id="commodity"
+                        name="commodity"
                         className={classes.inputText}
                         onChange={(event) => {setCommodity(event.target.value)}}
                     />
