@@ -1,6 +1,7 @@
 import React, {useCallback, useState, useEffect} from 'react';
 import {useParams} from "react-router";
 import { makeStyles } from '@material-ui/core/styles';
+import {useHistory} from "react-router-dom";
 import {
     Grid,
     List,
@@ -13,6 +14,7 @@ import {useHttp} from "../../hooks/http.hook";
 
 
 export const RoomRedaction = () => {
+    const history = useHistory();
     const classes = useStyles();
     const {request, error, clearError} = useHttp();
     const RoomId = useParams().id;
@@ -28,16 +30,13 @@ export const RoomRedaction = () => {
         try {
             let data;
             if (RoomId !== "new") {
-                console.log("0000")
                 data = await request(`/api/hotel/room/${RoomId}`, 'GET', null, {});
                 await setRoom(data.room);
                 await setRoomConveniences(data.roomConveniences);
             }
             else {
-                console.log("1111")
                 data = await request('/api/conveniences/commodities', 'GET', null, {});
             }
-            console.log("22222")
             await setConveniences(data.conveniences);
         } catch (e) {}
     }, [request]);
@@ -58,6 +57,10 @@ export const RoomRedaction = () => {
             }, {});
             await setRoom(data.room);
             await setRoomConveniences(data.conveniences);
+            if (RoomId === "new")
+                history.push(`/hotel/${room._id}`);
+
+
         } catch (e) {}
     }
 
