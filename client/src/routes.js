@@ -25,7 +25,7 @@ export const useRoutes = isRedaction => {
             <Route path="/home" exact>
                 <HomeRedaction/>
             </Route>
-            <Route path="/hotel/:id" >
+            <Route path="/hotel/:id" exact>
                 <HotelRedaction/>
             </Route>
             <Redirect to="/home"/>

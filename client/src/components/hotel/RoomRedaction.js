@@ -17,7 +17,7 @@ export const RoomRedaction = () => {
     const {request, error, clearError} = useHttp();
     const RoomId = useParams().id;
     const [room, setRoom] = useState(null);
-    const [roomConveniences, setRoomConveniences] = useState(null);
+    const [roomConveniences, setRoomConveniences] = useState([]);
     const [conveniences, setConveniences] = useState(null);
 
     const changeRoomHandler = event => {
@@ -25,11 +25,19 @@ export const RoomRedaction = () => {
     }
 
     const getRoom = useCallback(async () => {
-        if (RoomId !== "new")
         try {
-            const data = await request(`/api/hotel/room/${RoomId}`, 'GET', null, {});
-            await setRoom(data.room);
-            await setRoomConveniences(data.roomConveniences);
+            let data;
+            if (RoomId !== "new") {
+                console.log("0000")
+                data = await request(`/api/hotel/room/${RoomId}`, 'GET', null, {});
+                await setRoom(data.room);
+                await setRoomConveniences(data.roomConveniences);
+            }
+            else {
+                console.log("1111")
+                data = await request('/api/conveniences/commodities', 'GET', null, {});
+            }
+            console.log("22222")
             await setConveniences(data.conveniences);
         } catch (e) {}
     }, [request]);
@@ -44,7 +52,7 @@ export const RoomRedaction = () => {
 
     const createRoomHandler = async () => {
         try {
-            const data = await request(`/api/hotel/update-room`, 'POST', {
+            const data = await request(RoomId !== "new" ? `/api/hotel/update-room` : `/api/hotel/create-room`, 'POST', {
                 room,
                 conveniences: roomConveniences
             }, {});

@@ -147,7 +147,6 @@ module.exports.getRooms = async function(req, res) {
         const rooms = await Room.find();
 
         const roomConveniences = await RoomConveniences.find({}, 'roomId convenienceId -_id');;
-        console.log(roomConveniences)
 
         res.status(201).json({ rooms, roomConveniences });
     } catch(e) {

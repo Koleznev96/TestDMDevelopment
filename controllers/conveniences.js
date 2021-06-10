@@ -19,7 +19,8 @@ module.exports.createCommodity = async function(req, res) {
         });
 
         if (existing) {
-            return res.json({ conveniences: existing });
+            const conveniences = await Conveniences.find();
+            return res.json({ conveniences });
         }
 
         const convenienceNew = new Conveniences({
