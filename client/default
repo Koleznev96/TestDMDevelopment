@@ -1,0 +1,13 @@
+server {
+    listen 8081;
+	server_name 65.52.169.142
+	location / {
+	    poxy_pass http:localhost:5000;
+		proxy_http_version 1.1;
+		proxy_set_header Upgrade $http_upgrade;
+		proxy_set_header Connection 'upgrade';
+		proxy_set_header Host %host;
+		proxy_cach_bypass $http_upgrade;
+	}
+}
+

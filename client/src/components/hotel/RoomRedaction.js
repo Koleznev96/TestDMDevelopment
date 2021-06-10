@@ -58,7 +58,7 @@ export const RoomRedaction = () => {
             await setRoom(data.room);
             await setRoomConveniences(data.conveniences);
             if (RoomId === "new")
-                history.push(`/hotel/${room._id}`);
+                await history.push(`/hotel/${data.room._id}`);
 
 
         } catch (e) {}
