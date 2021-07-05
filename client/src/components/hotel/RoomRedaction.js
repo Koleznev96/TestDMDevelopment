@@ -1,7 +1,8 @@
 import React, {useCallback, useState, useEffect} from 'react';
 import {useParams} from "react-router";
-import { makeStyles } from '@material-ui/core/styles';
+import { useStyles } from './styles';
 import {useHistory} from "react-router-dom";
+import { Form, Field } from 'react-final-form'
 import {
     Grid,
     List,
@@ -21,6 +22,8 @@ export const RoomRedaction = () => {
     const [room, setRoom] = useState(null);
     const [roomConveniences, setRoomConveniences] = useState([]);
     const [conveniences, setConveniences] = useState(null);
+
+    function isNumber(n) { return !isNaN(parseFloat(n)) && !isNaN(n - 0) }
 
     const changeRoomHandler = event => {
         setRoom({ ...room, [event.target.name]: event.target.value });
@@ -49,7 +52,9 @@ export const RoomRedaction = () => {
         clearError();
     }, [error, clearError]);
 
-    const createRoomHandler = async () => {
+    const onSubmit = async values => {
+        let room = values
+
         try {
             const data = await request(RoomId !== "new" ? `/api/hotel/update-room` : `/api/hotel/create-room`, 'POST', {
                 room,
@@ -59,8 +64,6 @@ export const RoomRedaction = () => {
             await setRoomConveniences(data.conveniences);
             if (RoomId === "new")
                 await history.push(`/hotel/${data.room._id}`);
-
-
         } catch (e) {}
     }
 
@@ -134,259 +137,136 @@ export const RoomRedaction = () => {
         </List>
     );
 
-    return (
-        <Grid container className={classes.root}>
-            <Grid container className={classes.mainRoom} md={7}>
-                <Grid container className={classes.cartRoom}>
-                    <Grid container className={classes.textCartRoomType}>
-                        <Grid container className={classes.textInput}>
-                            Тип:
-                        </Grid>
-                        <TextField
-                            value={room ? room.type : null}
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="type"
-                            name="type"
-                            onChange={changeRoomHandler}
-                        />
-                        <Grid className={classes.hr}/>
-                    </Grid>
-                    <Box container className={classes.cartRoomData}>
-                        <Box className={classes.textDataItem}>
-                            <Grid container className={classes.textInput}>
-                                Плата за сутки:
-                            </Grid>
-                            <TextField
-                                value={room ? room.costPerDay : null}
-                                fullWidth
-                                id="costPerDay"
-                                name="costPerDay"
-                                autoFocus
-                                onChange={changeRoomHandler}
-                            />
-                        </Box>
-                        <Box className={classes.textDataItem}>
-                            <Grid container className={classes.textInput}>
-                                Количетсво спальных мест:
-                            </Grid>
-                            <TextField
-                                value={room ? room.numberBerths : null}
-                                fullWidth
-                                id="numberBerths"
-                                name="numberBerths"
-                                autoFocus
-                                onChange={changeRoomHandler}
-                            />
-                        </Box>
-                        <Box className={classes.textDataItem}>
-                            <Grid container className={classes.textInput}>
-                                Площадь:
-                            </Grid>
-                            <TextField
-                                value={room ? room.area : null}
-                                fullWidth
-                                id="area"
-                                name="area"
-                                autoFocus
-                                onChange={changeRoomHandler}
-                            />
-                        </Box>
-                        <Box className={classes.textDataItem}>
-                            <Grid container className={classes.textInput}>
-                                Количество комнат:
-                            </Grid>
-                            <TextField
-                                value={room ? room.numberRooms : null}
-                                fullWidth
-                                id="numberRooms"
-                                name="numberRooms"
-                                autoFocus
-                                onChange={changeRoomHandler}
-                            />
-                        </Box>
-                        <Box className={classes.textDataItem}>
-                            <Grid container className={classes.textInput}>
-                                Адрес:
-                            </Grid>
-                            <TextField
-                                value={room ? room.address : null}
-                                fullWidth
-                                id="address"
-                                name="address"
-                                autoFocus
-                                onChange={changeRoomHandler}
-                            />
-                        </Box>
-                    </Box>
-                </Grid>
-            </Grid>
+    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
-            <Grid container className={classes.mainConvenience} md={5}>
-                <Grid container className={classes.cartConvenience}>
-                    <Grid container className={classes.textCartConvenience}>
-                        Удобства:
-                        <Grid className={classes.hr}/>
+    // const onSubmit = async values => {
+    //     await sleep(300)
+    //     window.alert(JSON.stringify(values, 0, 2))
+    // }
+
+    return (
+        <Grid >
+            <Form
+                initialValues={room ? room : null}
+                onSubmit={onSubmit}
+                validate={values => {
+                    const errors = {}
+                    if (!values.type) {
+                        errors.type = 'Тип номера отеля не может быть пустым.'
+                    }
+                    if (values.costPerDay && !isNumber(values.costPerDay)) {
+                        errors.costPerDay = 'Введите число.'
+                    }
+                    if (values.numberBerths && !isNumber(values.numberBerths)) {
+                        errors.numberBerths = 'Введите число.'
+                    }
+                    if (values.area && !isNumber(values.area)) {
+                        errors.area = 'Введите число.'
+                    }
+                    if (values.numberRooms && !isNumber(values.numberRooms)) {
+                        errors.numberRooms = 'Введите число.'
+                    }
+                    return errors
+                }}
+                render={({ createRoomHandler, form, submitting, pristine, values }) => (
+                    <form onSubmit={createRoomHandler} className={classes.root}>
+                        <Grid container className={classes.mainRoom} md={7}>
+                            <Grid container className={classes.cartRoom}>
+                                <Box container className={classes.cartRoomData}>
+                                    <Field name="type">
+                                    {({ input, meta }) => (
+                                        <Grid className={classes.inputCart}>
+                                            <Grid container className={classes.textInput}>Тип</Grid>
+                                            <TextField value={room ? room.type : null} {...input} type="text" className={classes.inputText} margin="normal"/>
+                                            {meta.error && meta.touched && <span className={classes.textError}>{meta.error}</span>}
+                                        </Grid>
+                                    )}
+                                    </Field>
+                                    <Grid className={classes.hr}/>
+                                    <Field name="costPerDay">
+                                        {({ input, meta }) => (
+                                            <Grid className={classes.inputCart}>
+                                                <Grid container className={classes.textInput}>Плата за сутки:</Grid>
+                                                <TextField {...input} type="text" className={classes.inputText} margin="normal"/>
+                                                {meta.error && meta.touched && <span className={classes.textError}>{meta.error}</span>}
+                                            </Grid>
+                                        )}
+                                    </Field>
+                                    <Field name="numberBerths">
+                                        {({ input, meta }) => (
+                                            <Grid className={classes.inputCart}>
+                                                <Grid container className={classes.textInput}>Количетсво спальных мест:</Grid>
+                                                <TextField {...input} type="text" className={classes.inputText} margin="normal"/>
+                                                {meta.error && meta.touched && <span className={classes.textError}>{meta.error}</span>}
+                                            </Grid>
+                                        )}
+                                    </Field>
+                                    <Field name="area">
+                                        {({ input, meta }) => (
+                                            <Grid className={classes.inputCart}>
+                                                <Grid container className={classes.textInput}>Площадь:</Grid>
+                                                <TextField {...input} type="text" className={classes.inputText} margin="normal"/>
+                                                {meta.error && meta.touched && <span className={classes.textError}>{meta.error}</span>}
+                                            </Grid>
+                                        )}
+                                    </Field>
+                                    <Field name="numberRooms">
+                                        {({ input, meta }) => (
+                                            <Grid className={classes.inputCart}>
+                                                <Grid container className={classes.textInput}>Количество комнат:</Grid>
+                                                <TextField {...input} type="text" className={classes.inputText} margin="normal"/>
+                                                {meta.error && meta.touched && <span className={classes.textError}>{meta.error}</span>}
+                                            </Grid>
+                                        )}
+                                    </Field>
+                                    <Field name="address">
+                                        {({ input, meta }) => (
+                                            <Grid className={classes.inputCart}>
+                                                <Grid container className={classes.textInput}>Адрес:</Grid>
+                                                <TextField {...input} type="text" className={classes.inputText} margin="normal" value={room ? room.address : null}/>
+                                                {meta.error && meta.touched && <span className={classes.textError}>{meta.error}</span>}
+                                            </Grid>
+                                        )}
+                                    </Field>
+                                </Box>
+                            </Grid>
+                        </Grid>
+
+                    <Grid container className={classes.mainConvenience} md={5}>
+                        <Grid container className={classes.cartConvenience}>
+                            <Grid container className={classes.textCartConvenience}>
+                                Удобства:
+                                <Grid className={classes.hr}/>
+                            </Grid>
+                            <Grid container className={classes.cartConvenienceList}>
+                                {roomConveniences && <DisplayRoomConveniences />}
+                            </Grid>
+                            <Grid container className={classes.textCartConvenience}>
+                                Выберите подходящие:
+                                <Grid className={classes.hr}/>
+                            </Grid>
+                            <Grid container className={classes.cartConvenienceList}>
+                                {conveniences && <DisplayConveniences />}
+                            </Grid>
+                        </Grid>
                     </Grid>
-                    <Grid container className={classes.cartConvenienceList}>
-                        {roomConveniences && <DisplayRoomConveniences />}
+                    <Grid container className={classes.mainButton} md={12}>
+                        <Button
+                            className={classes.menuButton}
+                            // onClick={onSubmit}
+                            type="button"
+                            onClick={() => onSubmit(values)}
+                        >
+                            <Box
+                                className={classes.textButton}
+                            >
+                                Сохранить
+                            </Box>
+                        </Button >
                     </Grid>
-                    <Grid container className={classes.textCartConvenience}>
-                        Выберите подходящие:
-                        <Grid className={classes.hr}/>
-                    </Grid>
-                    <Grid container className={classes.cartConvenienceList}>
-                        {conveniences && <DisplayConveniences />}
-                    </Grid>
-                </Grid>
-            </Grid>
-            <Grid container className={classes.mainButton} md={12}>
-                <Button
-                    className={classes.menuButton}
-                    onClick={createRoomHandler}
-                >
-                    <Box
-                        className={classes.textButton}
-                    >
-                        Сохранить
-                    </Box>
-                </Button >
-            </Grid>
+                    </form>
+                )}
+            />
         </Grid>
     );
 }
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        backgroundColor: '#fff',
-        width: '100%',
-        paddingTop: 10,
-    },
-    textInput: {
-        fontSize: 12,
-        color: '#747474',
-    },
-    mainRoom: {
-        paddingLeft: 30,
-    },
-    mainButton: {
-        marginTop: 30,
-        width: '100%',
-        alignItems: 'center',
-    },
-    menuButton: {
-        height: 80,
-        width: '100%',
-    },
-    mainConvenience: {
-        paddingLeft: 55,
-        paddingRight: 10,
-    },
-    cartConvenience: {
-        width: '100%',
-        padding: 10,
-        backgroundColor: '#F2F0F0',
-        borderRadius: 20,
-        paddingBottom: 30,
-    },
-    cartConvenienceList: {
-        width: '100%',
-        padding: 10,
-        marginLeft: 10,
-        marginRight: 10,
-        backgroundColor: '#2366CA',
-        borderRadius: 5,
-    },
-    cartRoom: {
-        width: '100%',
-        padding: 5,
-        backgroundColor: '#F2F0F0',
-        borderRadius: 20,
-        paddingLeft: 30,
-        paddingRight: 30,
-    },
-    textCartConvenience: {
-        marginTop: 20,
-        fontSize: 20,
-        width: '100%',
-        color: '#000',
-        fontWeight: '700',
-    },
-    textCartRoomType: {
-        marginTop: 20,
-        fontSize: 28,
-        width: '100%',
-        color: '#000',
-        fontWeight: '700',
-    },
-    cartRoomData: {
-        marginTop: 20,
-        width: '100%',
-    },
-    hr: {
-        marginTop: 10,
-        width: '100%',
-        height: 1,
-        backgroundColor: '#2366CA',
-    },
-    textItem: {
-        marginLeft: 5,
-        color: '#2366CA',
-        fontSize: 14,
-    },
-    rItem: {
-    },
-    listItem: {
-        marginLeft: 5,
-        height: 20,
-        width: 300,
-        backgroundColor: '#fff',
-        borderRadius: 5,
-    },
-    list: {
-        paddingLeft: 20,
-        direction: "row",
-        width: '100%',
-    },
-    textHeader: {
-        marginLeft: 5,
-        color: '#fff',
-        fontSize: 14,
-        width: '100%',
-        fontWeight: '700',
-    },
-    textButton: {
-        fontWeight: '300',
-        color: '#2366CA',
-        fontSize: 16,
-    },
-    boxData: {
-        marginTop: 10,
-        width: '100%',
-
-    },
-    boxDataColom: {
-        marginTop: 10,
-        paddingLeft: 10,
-        paddingRight: 10,
-    },
-    textDataItem: {
-        marginBottom: 10,
-        color: '#2366CA',
-        fontSize: 14,
-    },
-    buttonDelete: {
-        width: 20,
-        height: 20,
-        backgroundColor: '#fff'
-    },
-    textDelete: {
-        color: 'red',
-        fontSize: 10,
-    },
-    textAdd: {
-        color: '#2366CA',
-        fontSize: 10,
-    }
-}));

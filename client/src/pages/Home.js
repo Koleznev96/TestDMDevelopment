@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { useStyles } from './styles';
 import { Grid } from '@material-ui/core';
 
 import {Conveniences} from "../components/home/Conveniences";
@@ -28,16 +28,3 @@ export const Home = () => {
         </SortContext.Provider>
     );
 };
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1,
-    },
-    conveniences: {
-        minHeight: '100vh',
-        maxHeight: '100%',
-    },
-    rooms: {
-
-    }
-}));

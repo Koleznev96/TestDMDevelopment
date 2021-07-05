@@ -6,7 +6,11 @@ import {HomeRedaction} from "./pages/HomeRedaction";
 import {Hotel} from "./pages/Hotel";
 import {HotelRedaction} from "./pages/HotelRedaction";
 
+import {useSelector} from "react-redux";
+
 export const useRoutes = isRedaction => {
+
+
     if (!isRedaction) {
         return (
             <Switch>

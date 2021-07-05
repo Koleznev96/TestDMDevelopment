@@ -1,6 +1,6 @@
-module.exports = (res, error) => {
-    res.status(500).json({
+module.exports = (res, error, statusCode = 500) => {
+    res.status(statusCode).json({
         success: false,
-        massage: error.message ? error.message : error
+        error: error.message ? error.message : error
     });
 }

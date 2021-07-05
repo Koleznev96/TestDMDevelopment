@@ -1,5 +1,5 @@
 import React, {useCallback, useState, useEffect, useContext} from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { useStyles } from './stylesConveniences';
 import {
     Button,
     Grid,
@@ -16,7 +16,7 @@ import {SortContext} from "../../context/sortContext";
 export const Conveniences = () => {
     const list_sort = useContext(SortContext);
     const classes = useStyles();
-    const {loading, request, error, clearError} = useHttp();
+    const {request, error, clearError} = useHttp();
     const [listConveniences, setListConveniences] = useState([]);
     const [checked, setChecked] = React.useState([]);
 
@@ -69,7 +69,7 @@ export const Conveniences = () => {
                                 disableRipple
                             />
                         </ListItemIcon>
-                        <Grid className={classes.textItem}>
+                        <Grid className={classes.textItemView}>
                             {item.commodity}
                         </Grid>
                     </ListItem>
@@ -92,7 +92,7 @@ export const Conveniences = () => {
                 </List>
                 <Grid container className={classes.linerButton}>
                     <Button
-                        className={classes.menuButton}
+                        className={classes.menuButtonView}
                         onClick={() => {handleSort()}}
                     >
                         <Grid
@@ -106,56 +106,3 @@ export const Conveniences = () => {
         </Grid>
     );
 }
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        backgroundColor: '#2366CA',
-        height: '100%',
-    },
-    row: {
-        marginLeft: 100,
-        flexDirection: 'column',
-    },
-    itemConveniences: {
-        height: 20,
-        width: '80%',
-        backgroundColor: '#000',
-    },
-    itemConveniencesActive: {
-        height: 20,
-        width: '80%',
-        backgroundColor: '#fff',
-    },
-    textItem: {
-        color: '#fff',
-        fontSize: 12,
-    },
-    listItem: {
-        width: '100%',
-    },
-    iconItem: {
-        height: 24,
-        width: 24,
-    },
-    textHeader: {
-        marginLeft: 5,
-        color: '#fff',
-        fontSize: 14,
-        width: '100%',
-        fontWeight: '700',
-    },
-    textButton: {
-        fontWeight: '300',
-        color: '#2366CA',
-        fontSize: 16,
-    },
-    linerButton: {
-        width: '100%',
-        justifyContent: 'center',
-    },
-    menuButton: {
-        width: 150,
-        height: 30,
-        backgroundColor: '#fff'
-    }
-}));

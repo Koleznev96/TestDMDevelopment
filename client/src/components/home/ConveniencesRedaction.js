@@ -1,5 +1,5 @@
-import React, {useCallback, useState, useEffect, useContext} from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React, {useCallback, useState, useEffect} from 'react';
+import { useStyles } from './stylesConveniences';
 import {
     Button,
     Grid,
@@ -15,7 +15,8 @@ export const ConveniencesRedaction = () => {
     const classes = useStyles();
     const {request, error, clearError} = useHttp();
     const [listConveniences, setListConveniences] = useState([]);
-    const [commodity, setCommodity] = useState(null);
+    const [commodity, setCommodity] = useState("");
+    const [errorNameCommodity, setErrorNameCommodity] = useState(false);
 
     const getConveniences = useCallback(async () => {
         try {
@@ -42,6 +43,11 @@ export const ConveniencesRedaction = () => {
     };
 
     const handleCreatConvenience = async () => {
+        if (commodity === "") {
+            setErrorNameCommodity(true);
+            return
+        }
+        setErrorNameCommodity(false);
         try {
             const data = await request('/api/conveniences/create-commodity', 'POST', {
                 convenience: {commodity}
@@ -81,7 +87,7 @@ export const ConveniencesRedaction = () => {
 
     return (
         <Grid container className={classes.root}>
-            <Grid container className={classes.row}>
+            <Grid container className={classes.rowRed}>
                 <Grid container className={classes.textHeader}>
                     Редактирование удобств:
                 </Grid>
@@ -99,6 +105,7 @@ export const ConveniencesRedaction = () => {
                         onChange={(event) => {setCommodity(event.target.value)}}
                     />
 
+
                     <Button
                         className={classes.menuButton}
                         onClick={() => {handleCreatConvenience()}}
@@ -111,76 +118,14 @@ export const ConveniencesRedaction = () => {
                     </Grid>
 
                     </Button >
+
+                    { errorNameCommodity &&
+                    <Grid className={classes.textError}>
+                        Название удобства не может быть пустым.
+                    </Grid>
+                    }
                 </Grid>
             </Grid>
         </Grid>
     );
 }
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        backgroundColor: '#2366CA',
-    },
-    row: {
-        marginLeft: 80,
-        flexDirection: 'column',
-    },
-    itemConveniences: {
-        height: 20,
-        width: '80%',
-        backgroundColor: '#000',
-    },
-    itemConveniencesActive: {
-        height: 20,
-        width: '80%',
-        backgroundColor: '#fff',
-    },
-    textItem: {
-        marginLeft: 10,
-        color: '#fff',
-        fontSize: 12,
-    },
-    listItem: {
-        width: '100%',
-    },
-    iconItem: {
-        height: 24,
-        width: 24,
-    },
-    textHeader: {
-        marginLeft: 5,
-        color: '#fff',
-        fontSize: 14,
-        width: '100%',
-        fontWeight: '700',
-    },
-    textButton: {
-        fontWeight: '300',
-        color: '#2366CA',
-        fontSize: 16,
-    },
-    linerButton: {
-        width: '100%',
-        justifyContent: 'center',
-    },
-    menuButton: {
-        marginTop: 35,
-        width: 150,
-        height: 30,
-        backgroundColor: '#fff'
-    },
-    buttonDelete: {
-        width: 20,
-        height: 20,
-        backgroundColor: '#fff'
-    },
-    textDelete: {
-        color: 'red',
-        fontSize: 10,
-    },
-    inputText: {
-        width: 150,
-        height: 5,
-        color: '#fff',
-    },
-}));

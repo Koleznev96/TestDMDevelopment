@@ -8,10 +8,7 @@ module.exports.createCommodity = async function(req, res) {
         const { convenience } = req.body;
 
         if (!convenience.commodity || convenience.commodity === "") {
-            return res.status(401).json({
-                success: false,
-                massage: "Поле commodity пустое."
-            });
+            return errorHandler(res, {massage: "Поле commodity пустое."}, 401);
         }
 
         const existing = await Conveniences.findOne({
@@ -42,17 +39,11 @@ module.exports.updateCommodity = async function(req, res) {
         const { convenience } = req.body;
 
         if (!convenience.commodity || convenience.commodity === "") {
-            return res.status(401).json({
-                success: false,
-                massage: "Поле commodity пустое."
-            });
+            return errorHandler(res, {massage: "Поле commodity пустое."}, 401);
         }
 
         if (!convenience._id || convenience._id === "") {
-            return res.status(401).json({
-                success: false,
-                massage: "Поле _id пустое."
-            });
+            return errorHandler(res, {massage: "Поле _id пустое."}, 401);
         }
 
         let convenienceUpdate = await Conveniences.findOne({
@@ -60,10 +51,7 @@ module.exports.updateCommodity = async function(req, res) {
         });
 
         if (!convenienceUpdate) {
-            return res.status(500).json({
-                success: false,
-                massage: `Удобство с id: ${convenience._id}, не найдено.`
-            });
+            return errorHandler(res, {massage: `Удобство с id: ${convenience._id}, не найдено.`}, 401);
         }
 
         convenienceUpdate.commodity = convenience.commodity;
@@ -82,10 +70,7 @@ module.exports.deleteCommodity = async function(req, res) {
         const { convenience } = req.body;
 
         if (!convenience._id || convenience._id === "") {
-            return res.status(401).json({
-                success: false,
-                massage: "Поле _id пустое."
-            });
+            return errorHandler(res, {massage: "Поле _id пустое."}, 401);
         }
 
         const convenienceDelete = await Conveniences.findOne({
@@ -93,10 +78,7 @@ module.exports.deleteCommodity = async function(req, res) {
         });
 
         if (!convenienceDelete) {
-            return res.status(404).json({
-                success: false,
-                massage: `Удобство с id: ${convenience._id}, не найдено.`
-            });
+            return errorHandler(res, {massage: `Удобство с id: ${convenience._id}, не найдено.`}, 401);
         }
 
         await convenienceDelete.delete();

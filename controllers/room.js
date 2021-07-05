@@ -4,6 +4,8 @@ const Room = require('../models/Room');
 const Conveniences = require('../models/Conveniences');
 const RoomConveniences = require('../models/RoomConveniences');
 
+function isNumber(n) { return !isNaN(parseFloat(n)) && !isNaN(n - 0) }
+
 async function transform_conveniences(conveniences, roomId) {
     // Transform the "conveniences" list to add to the "RoomConveniences" table
     let room_conveniences_list = [];
@@ -21,10 +23,23 @@ module.exports.createRoom = async function(req, res) {
         const { room, conveniences } = req.body;
 
         if (!room.type || room.type === "") {
-            return res.status(401).json({
-                success: false,
-                massage: "В обьекте room поле type пустое."
-            });
+            return errorHandler(res, {massage: "В обьекте room поле type пустое."}, 401);
+        }
+
+        if (room.costPerDay && !isNumber(room.costPerDay)) {
+            return errorHandler(res, {massage: "В обьекте room поле costPerDay должно ялвляться числом."}, 401);
+        }
+
+        if (room.numberBerths && !isNumber(room.numberBerths)) {
+            return errorHandler(res, {massage: "В обьекте room поле numberBerths должно ялвляться числом."}, 401);
+        }
+
+        if (room.area && !isNumber(room.area)) {
+            return errorHandler(res, {massage: "В обьекте room поле area должно ялвляться числом."}, 401);
+        }
+
+        if (room.numberRooms && !isNumber(room.numberRooms)) {
+            return errorHandler(res, {massage: "В обьекте room поле numberRooms должно ялвляться числом."}, 401);
         }
 
         const roomNew = new Room({
@@ -56,17 +71,27 @@ module.exports.updateRoom = async function(req, res) {
         const { room, conveniences } = req.body;
 
         if (!room.type || room.type === "") {
-            return res.status(401).json({
-                success: false,
-                massage: "В обьекте room поле type пустое."
-            });
+            return errorHandler(res, {massage: "В обьекте room поле type пустое."}, 401);
         }
 
         if (!room._id || room._id === "") {
-            return res.status(401).json({
-                success: false,
-                massage: "В обьекте room поле _id пустое."
-            });
+            return errorHandler(res, {massage: "В обьекте room поле _id пустое."}, 401);
+        }
+
+        if (room.costPerDay && !isNumber(room.costPerDay)) {
+            return errorHandler(res, {massage: "В обьекте room поле costPerDay должно ялвляться числом."}, 401);
+        }
+
+        if (room.numberBerths && !isNumber(room.numberBerths)) {
+            return errorHandler(res, {massage: "В обьекте room поле numberBerths должно ялвляться числом."}, 401);
+        }
+
+        if (room.area && !isNumber(room.area)) {
+            return errorHandler(res, {massage: "В обьекте room поле area должно ялвляться числом."}, 401);
+        }
+
+        if (room.numberRooms && !isNumber(room.numberRooms)) {
+            return errorHandler(res, {massage: "В обьекте room поле numberRooms должно ялвляться числом."}, 401);
         }
 
         const roomUpdate = await Room.findOne({
