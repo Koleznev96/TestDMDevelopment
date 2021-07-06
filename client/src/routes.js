@@ -6,12 +6,9 @@ import {HomeRedaction} from "./pages/HomeRedaction";
 import {Hotel} from "./pages/Hotel";
 import {HotelRedaction} from "./pages/HotelRedaction";
 
-import {useSelector} from "react-redux";
-
-export const useRoutes = isRedaction => {
-
-
-    if (!isRedaction) {
+export const useRoutes = (statusRedaction) => {
+    console.log(statusRedaction)
+    if (!statusRedaction) {
         return (
             <Switch>
                 <Route path="/home" exact>
@@ -36,3 +33,9 @@ export const useRoutes = isRedaction => {
         </Switch>
     );
 }
+
+
+
+
+
+export default useRoutes;

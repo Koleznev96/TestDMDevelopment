@@ -1,21 +1,14 @@
 import { createStore } from 'redux';
+import {ACTIONS} from "./actionTypes";
 
-const statusReducer = (state = { status: false }, action) => {
-    if (action.type === 'increment') {
-        return {
-            status: true
-        }
+const statusRedactionReducer = (state = { statusRedaction: false }, action) => {
+    switch (action.type) {
+        case ACTIONS.changeTrueRedaction: return {statusRedaction: true};
+        case ACTIONS.changeFalseRedaction: return {statusRedaction: false};
     }
-
-    if (action.type === 'decrement') {
-        return {
-            status: false
-        }
-    }
-
     return state;
 };
 
-const store = createStore(statusReducer);
+const store = createStore(statusRedactionReducer);
 
 export default store;

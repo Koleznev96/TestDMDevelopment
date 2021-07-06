@@ -6,15 +6,14 @@ import {
     Grid,
     Box
 } from '@material-ui/core';
+import {connect} from "react-redux";
 
-import {RedactionContext} from "../context/redactionContext";
-import {useSelector, useDispatch} from "react-redux";
+// import store from "../store";
+import {ACTIONS} from "../store/actionTypes";
 
-export const Menu = () => {
-    const dispatch = useDispatch();
-    const status = useSelector(state => state.status);
-
+export const Menu = (statusRedaction, changeTrueRedaction, changeFalseRedaction) => {
     // const menu = useContext(RedactionContext);
+    console.log("statusRedaction-", statusRedaction)
     const history = useHistory();
     const classes = useStyles();
 
@@ -34,22 +33,22 @@ export const Menu = () => {
             </Grid>
             <Grid container className={classes.menu} md={9}>
                 <Button
-                    className={status ? classes.menuButton : classes.menuButtonActive}
-                    onClick={() => dispatch({type: 'decrement'})}
+                    className={statusRedaction ? classes.menuButton : classes.menuButtonActive}
+                    onClick={() => changeFalseRedaction()}
                 >
                     <Grid
-                        className={status ? classes.textButton : classes.textButtonActive}
+                        className={statusRedaction ? classes.textButton : classes.textButtonActive}
                     >
                         Просмотр
                     </Grid>
                 </Button >
                 <Button
                     maxWidth="sm"
-                    className={status ? classes.menuButtonActive : classes.menuButton}
-                    onClick={() => dispatch({type: 'increment'})}
+                    className={statusRedaction ? classes.menuButtonActive : classes.menuButton}
+                    onClick={() => changeTrueRedaction()}
                 >
                     <Grid
-                        className={status ? classes.textButtonActive : classes.textButton}
+                        className={statusRedaction ? classes.textButtonActive : classes.textButton}
                     >
                         Редактирование
                     </Grid>
@@ -58,3 +57,5 @@ export const Menu = () => {
         </Grid>
     );
 }
+
+export default Menu;

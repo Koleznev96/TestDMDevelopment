@@ -2,26 +2,30 @@ import React from 'react';
 import {BrowserRouter as Router} from 'react-router-dom';
 
 import {useRoutes} from "./routes";
-import {useRedaction} from "./hooks/redaction.hook";
-import {RedactionContext} from "./context/redactionContext";
 import {Menu} from "./components/Menu";
-import {Provider, useSelector} from "react-redux";
+import {connect} from "react-redux";
 
-import store from "./store";
-
-function App() {
-    // const {isRedaction, changeTrueRedaction, changeFalseRedaction} = useRedaction();
-    const status = useSelector(state => state.status);
-    const routes = useRoutes(status);
+function App({statusRedaction, changeTrueRedaction, changeFalseRedaction}) {
+    const routes = useRoutes(statusRedaction);
+    const menu = Menu(statusRedaction, changeTrueRedaction, changeFalseRedaction)
 
     return (
-        <Provider store={store}>
             <Router>
-                <Menu />
+                {menu}
                 {routes}
             </Router>
-        </Provider>
     );
 }
 
-export default App;
+const mapStateToProps = state => {
+    return { statusRedaction: state.statusRedaction };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        changeTrueRedaction: () => dispatch({ type: 'changeTrueRedaction' }),
+        changeFalseRedaction: () => dispatch({ type: 'changeFalseRedaction' }),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
